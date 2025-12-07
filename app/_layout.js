@@ -25,11 +25,17 @@ const Layout = () => {
 
           <Stack.Screen
             name="home/image"
-            options={{ 
-              headerShown: false, 
+            options={{
+              headerShown: false,
               presentation: 'transparentModal',
               animation: 'fade'
-             }}
+            }}
+          />
+          <Stack.Screen
+            name="home/liked"
+            options={{
+              headerShown: false,
+            }}
           />
         </Stack>
       </BottomSheetModalProvider>

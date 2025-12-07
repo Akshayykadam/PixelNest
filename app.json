@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "wallsPi",
-    "slug": "wallsPi",
+    "name": "PixelNest",
+    "slug": "pixelnest",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

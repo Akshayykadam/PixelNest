@@ -25,8 +25,8 @@ export const CommonView = ({ data, filters, filterName, setFilters }) => {
             {
                 data && data.map((item, index) => {
                     let isActive = filters && filters[filterName] == item;
-                    let backgroundColor = isActive ? '#1877F2' : 'white';
-                    let color = isActive ? 'white' : theme.colors.neutral(0.7)
+                    let backgroundColor = isActive ? theme.colors.black : theme.colors.search; // White active, dark inactive
+                    let color = isActive ? theme.colors.white : theme.colors.black; // Black text active, White inactive
                     return (
                         <Pressable
                             onPress={() => onSelect(item)}
@@ -58,7 +58,7 @@ export const ColourFilterView = ({ data, filters, filterName, setFilters }) => {
                     return (
                         <Pressable onPress={() => onSelect(item)} key={item}>
 
-                            <View style={[styles.colorWrapper, {borderColor}]}>
+                            <View style={[styles.colorWrapper, { borderColor }]}>
                                 <View style={[styles.color, { backgroundColor: item }]} />
                             </View>
                         </Pressable>
@@ -76,27 +76,21 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: hp(2.4),
         fontWeight: theme.fontWeights.medium,
-        color: theme.colors.neutral(0.8)
-
+        color: theme.colors.black // White text
     },
     outlinedButton: {
         padding: 10,
         paddingHorizontal: 16,
         borderRadius: theme.radius.xs,
         borderCurve: 'continuous',
-        backgroundColor: 'white',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        backgroundColor: theme.colors.search, // Dark background
+        borderWidth: 1,
+        borderColor: theme.colors.card,
     },
     outlinedButtonText: {
         fontSize: 14,
         fontWeight: theme.fontWeights.semibold,
-        color: theme.colors.neutral(0.8),
+        color: theme.colors.black, // White text
         textAlign: 'center',
     },
     flexRowWrap: {
@@ -113,15 +107,10 @@ const styles = StyleSheet.create({
     color: {
         height: 40,
         width: 40,
-        borderRadius: theme.radius.sm-3,
+        borderRadius: theme.radius.sm - 3,
         borderCurve: 'continuous',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.2)' // Subtle border for colors
     }
 
 })

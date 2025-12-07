@@ -62,7 +62,7 @@ const FiltersModel = ({
                         entering={FadeInDown.delay(500).springify().damping(11)}
                         style={styles.buttons}>
                         <Pressable style={styles.resetButton} onPress={onReset}>
-                            <Text style={[styles.buttonText, { color: theme.colors.neutral(0.9) }]}>Reset</Text>
+                            <Text style={[styles.buttonText, { color: theme.colors.black }]}>Reset</Text>
                         </Pressable>
                         <Pressable style={styles.applyButton} onPress={onApply}>
                             <Text style={[styles.buttonText, { color: theme.colors.white }]}>Apply</Text>
@@ -118,9 +118,10 @@ const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: theme.colors.card, // Dark card background for sheet
     },
     overlay: {
-        backgroundColor: 'rgba(0,0,0,0.5)'
+        backgroundColor: 'rgba(0,0,0,0.7)' // Darker overlay
     },
     content: {
         flex: 1,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     filterText: {
         fontSize: hp(4),
         fontWeight: theme.fontWeights.semibold,
-        color: theme.colors.neutral(0.8),
+        color: theme.colors.black, // White text
         marginBottom: 5
     },
     buttons: {
@@ -146,19 +147,14 @@ const styles = StyleSheet.create({
     },
     resetButton: {
         flex: 1,
-        backgroundColor: theme.colors.neutral(0.15),
+        backgroundColor: theme.colors.search, // Dark search bg
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: theme.radius.md,
         borderCurve: 'continuous',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        borderWidth: 1,
+        borderColor: theme.colors.neutral(0.2),
     },
     applyButton: {
         flex: 1,

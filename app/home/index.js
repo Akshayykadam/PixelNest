@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, Pressable, ScrollView, TextInput, ActivityIndicator, Animated } from 'react-native'
+import { View, Text, StyleSheet, Pressable, ScrollView, TextInput, ActivityIndicator } from 'react-native'
+import Animated, { FadeInDown, FadeOutDown } from 'react-native-reanimated'
 import React, { useCallback } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Feather, FontAwesome6, Ionicons } from '@expo/vector-icons'
+import { FontAwesome6, Feather, Ionicons } from '@expo/vector-icons'
 import { theme } from '../../constants/theme'
 import { hp, wp } from '../../helpers/common'
 import { useState, useRef, useEffect } from 'react'
@@ -21,7 +22,7 @@ const HomeScreen = () => {
     const [search, setSearch] = useState('');
     const [images, setImages] = useState([]);
     const [filters, setFilters] = useState(null);
-    const [activeCategory, setActiveCategory] = useState(null);
+    const [activeCategory, setActiveCategory] = useState('nature');
     const [isEndReached, setIsEndReached] = useState(false);
 
     const searchInputRef = useRef(null);
@@ -32,7 +33,7 @@ const HomeScreen = () => {
 
 
     useEffect(() => {
-        fetchImages();
+        fetchImages({ page: 1, category: 'nature' });
     }, []);
 
     const fetchImages = async (param = { page: 1 }, append = false) => {
@@ -141,9 +142,9 @@ const HomeScreen = () => {
         const scrollViewHeight = event.nativeEvent.layoutMeasurement.height;
         const scrollOffset = event.nativeEvent.contentOffset.y;
         const bottomPosition = contentHeight - scrollViewHeight;
-    
+
         if (scrollOffset >= bottomPosition - 1) {
-            if(!isEndReached){
+            if (!isEndReached) {
                 setIsEndReached(true);
                 ++page;
                 let param = {
@@ -153,7 +154,7 @@ const HomeScreen = () => {
                 if (search) param.q = search;
                 fetchImages(param, true);
             }
-        } else if (isEndReached){
+        } else if (isEndReached) {
             setIsEndReached(false);
         }
     }
@@ -168,57 +169,47 @@ const HomeScreen = () => {
 
     const handleTextDebounce = useCallback(debounce(handleSearch, 400, []))
 
+    const [showCategories, setShowCategories] = useState(false);
+    const categoryTimer = useRef(null);
+
+    // ... existing functions ...
+
+    const toggleCategories = () => {
+        if (showCategories) {
+            setShowCategories(false);
+            if (categoryTimer.current) clearTimeout(categoryTimer.current);
+        } else {
+            setShowCategories(true);
+            // Auto hide after 5 seconds
+            if (categoryTimer.current) clearTimeout(categoryTimer.current);
+            categoryTimer.current = setTimeout(() => {
+                setShowCategories(false);
+            }, 5000);
+        }
+    }
+
+    // Reset timer on interaction if needed, or stick to simple toggle
+
     return (
         <View style={[styles.container, { paddingTop }]}>
 
             {/* Header */}
             <View style={styles.header}>
-                <Pressable onPress={handleScrollUp}>
-                    <Text style={styles.title}>
-                        WallPie
-                    </Text>
-                </Pressable>
-                <Pressable onPress={openFilterModel}>
-                    <FontAwesome6 name="bars-staggered" size={22} color={theme.colors.neutral(0.7)} />
+                <View style={{ width: 30 }} />
+                <Text style={styles.title}>
+                    PixelNest
+                </Text>
+                <Pressable onPress={() => router.push('home/liked')}>
+                    <Feather name="heart" size={24} color={theme.colors.neutral(0.7)} />
                 </Pressable>
             </View>
-            <View>
-                {/* categories */}
-                <View style={styles.categories}>
-                    <Categories
-                        activeCategory={activeCategory}
-                        handleChangeCategory={handleChangeCategory}
-                    />
-                </View>
-                {/* Search bar */}
-                <View style={styles.searchBar}>
-                    <View style={styles.searchIcon}>
-                        <Feather name="search" size={24} color={theme.colors.neutral(0.4)} />
-                    </View>
-                    <TextInput
-                        placeholder='Seach for wallpaper'
-                        ref={searchInputRef}
-                        onChangeText={handleTextDebounce} //added delay time for search
-                        style={styles.searchInput}
-                    />
-                    {
-                        search && (
-                            <Pressable onPress={() => { handleSearch("") }} style={styles.closeIcon}>
-                                <Ionicons name="close" size={24} color={theme.colors.neutral(0.4)} />
-                            </Pressable>
-                        )
-                    }
-                </View>
-                
-            </View>
-
             {/* Main Home */}
             <ScrollView
                 onScroll={handleScroll}
                 scrollEventThrottle={5}
                 ref={scrollRef}
+                contentContainerStyle={{ paddingBottom: 200 }}
             >
-
                 {/* filters */}
                 {
                     filters && (
@@ -269,6 +260,51 @@ const HomeScreen = () => {
                 </View>
             </ScrollView>
 
+            {/* Bottom Navigation Area */}
+            <View style={styles.bottomContainer}>
+
+                {/* Floating Categories */}
+                {
+                    showCategories && (
+                        <Animated.View entering={FadeInDown.springify()} exiting={FadeOutDown.springify()} style={styles.categoriesFloating}>
+                            <Categories
+                                activeCategory={activeCategory}
+                                handleChangeCategory={handleChangeCategory}
+                            />
+                        </Animated.View>
+                    )
+                }
+
+                {/* Search bar */}
+                <View style={styles.searchBar}>
+                    {/* Category Toggle Button */}
+                    <Pressable onPress={toggleCategories} style={styles.iconButton}>
+                        <FontAwesome6 name={showCategories ? "xmark" : "layer-group"} size={20} color={theme.colors.neutral(0.5)} />
+                    </Pressable>
+
+
+                    <TextInput
+                        placeholder='Search for picture'
+                        placeholderTextColor={theme.colors.placeholder}
+                        ref={searchInputRef}
+                        onChangeText={handleTextDebounce} //added delay time for search
+                        style={styles.searchInput}
+                    />
+                    {
+                        search ? (
+                            <Pressable onPress={() => { handleSearch("") }} style={styles.closeIcon}>
+                                <Ionicons name="close" size={20} color={theme.colors.neutral(0.4)} />
+                            </Pressable>
+                        ) : (
+                            <View style={styles.searchIcon}>
+                                <Feather name="search" size={20} color={theme.colors.neutral(0.4)} />
+                            </View>
+                        )
+                    }
+                </View>
+
+            </View>
+
             {/* Filters model */}
             <FiltersModel
                 modelRef={modelRef}
@@ -286,46 +322,62 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         gap: 15,
+        backgroundColor: theme.colors.white, // Ensure full dark background
     },
     header: {
         marginHorizontal: wp(4),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingVertical: 10,
     },
     title: {
-        fontSize: hp(4),
-        fontWeight: theme.fontWeights.semibold,
-        color: theme.colors.neutral(0.9),
-        tintColor: theme.colors.primary,
+        fontSize: hp(2), // Reduced size to match search
+        fontWeight: theme.fontWeights.medium,
+        color: theme.colors.placeholder,
+        letterSpacing: 1,
+    },
+    categoriesFloating: {
+        marginBottom: 10,
     },
     searchBar: {
         marginHorizontal: wp(4),
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: theme.colors.white,
-        paddingVertical: 8,
-        paddingHorizontal: 12,
+        backgroundColor: theme.colors.search,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         borderRadius: theme.radius.xl,
-        shadowColor: theme.colors.black,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
+        marginBottom: 10,
+        gap: 10
     },
-
+    bottomContainer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(18, 18, 18, 0.9)', // Semi-transparent dark bg
+        paddingTop: 10,
+        paddingBottom: 20,
+        borderTopWidth: 1,
+        borderTopColor: 'rgba(255,255,255,0.1)'
+    },
+    iconButton: {
+        padding: 5
+    },
     searchIcon: {
-        padding: 8,
+        padding: 5,
     },
     searchInput: {
         flex: 1,
         borderRadius: theme.radius.sm,
-        paddingVertical: 10,
-        fontSize: hp(1.8)
+        paddingVertical: 8, // Reduced
+        fontSize: hp(1.8),
+        color: theme.colors.black,
     },
     closeIcon: {
-        padding: 8,
+        padding: 4,
         backgroundColor: theme.colors.neutral(0.1),
         borderRadius: 50
     },
@@ -346,7 +398,7 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     filterItem: {
-        backgroundColor: theme.colors.white,
+        backgroundColor: theme.colors.card, // Dark card background for filters
         padding: 3,
         flexDirection: 'row',
         alignItems: 'center',
@@ -354,18 +406,14 @@ const styles = StyleSheet.create({
         padding: 8,
         gap: 10,
         paddingHorizontal: 10,
-        shadowColor: theme.colors.black,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
-
+        // Remove strong shadows for cleaner look
     },
     filterItemText: {
-        fontSize: hp(1.9)
+        fontSize: hp(1.9),
+        color: theme.colors.black // White text
     },
     filterCloseIcon: {
-        backgroundColor: '#1877F2',
+        backgroundColor: theme.colors.neutral(0.2), // Subtle close icon
         padding: 4,
         borderRadius: theme.radius.xs,
     }

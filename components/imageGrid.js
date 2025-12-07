@@ -4,9 +4,9 @@ import { MasonryFlashList } from "@shopify/flash-list";
 import ImageCard from "./imageCard";
 import { getColumnsCount, wp } from "../helpers/common";
 
-const ImageGrid = ({images, router}) => {
+const ImageGrid = ({ images, router }) => {
 
-    const columns = getColumnsCount();
+  const columns = getColumnsCount();
 
   return (
     <View style={styles.container}>
@@ -23,13 +23,14 @@ const ImageGrid = ({images, router}) => {
 };
 
 const styles = StyleSheet.create({
-    container:{
-        minHeight: 3,
-        width: wp(100)
-    },
-    listContainerStyle:{
-        paddingHorizontal: wp(4)
-    },
+  container: {
+    flex: 1,
+    minHeight: 3,
+    width: wp(100)
+  },
+  listContainerStyle: {
+    paddingHorizontal: wp(4)
+  },
 });
 
 export default ImageGrid;

@@ -1,34 +1,34 @@
 const categories = [
-    "backgrounds", 
-    "fashion", 
-    "nature", 
-    "science", 
+    "backgrounds",
+
+    "nature",
+    "science",
     "education",
-    "feelings", 
-    "health", 
-    "people", 
-    "religion", 
+    "feelings",
+    "health",
+    "people",
+    "religion",
     "places",
-    "animals", 
-    "industry", 
-    "computer", 
-    "food", 
+    "animals",
+    "industry",
+    "computer",
+    "food",
     "sports",
-    "transportation", 
-    "travel", 
-    "buildings", 
-    "business", 
+    "transportation",
+    "travel",
+    "buildings",
+    "business",
     "music"
 ];
 
-const filters={
-    order:["popular", "latest"],
-    orientation:["horizontal", "vertical"],
-    type:["all", "photo", "illustration", "vector"],
-    colors:["red", "orange", "yellow", "green", "turquoise", "blue", "pink", , "gray", "black", "brown", "white"]
+const filters = {
+    order: ["popular", "latest"],
+    orientation: ["horizontal", "vertical"],
+    type: ["all", "photo", "illustration", "vector"],
+    colors: ["red", "orange", "yellow", "green", "turquoise", "blue", "pink", , "gray", "black", "brown", "white"]
 }
 
-export const data ={
+export const data = {
     categories,
     filters
 }
