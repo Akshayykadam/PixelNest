@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.akshaykadam.wallsPi"
+      "bundleIdentifier": "com.akshaykadam.pixelnest"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.akshaykadam.wallsPi"
+      "package": "com.akshaykadam.pixelnest"
     },
     "web": {
       "bundler": "metro",
@@ -39,7 +39,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "b573af6b-3be2-4d72-aa4e-15a352d6411c"
+        "projectId": "68309e76-1e20-4aa3-a20a-c03b067f8992"
       }
     }
   }
