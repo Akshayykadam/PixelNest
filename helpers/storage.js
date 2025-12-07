@@ -12,7 +12,7 @@ export const storeLikedImage = async (image) => {
             await AsyncStorage.setItem('likedImages', JSON.stringify(likedImages));
         }
     } catch (error) {
-        console.log('Error storing liked image', error);
+
     }
 }
 
@@ -24,7 +24,7 @@ export const removeLikedImage = async (imageId) => {
         const newLikedImages = likedImages.filter(img => img.id !== imageId);
         await AsyncStorage.setItem('likedImages', JSON.stringify(newLikedImages));
     } catch (error) {
-        console.log('Error removing liked image', error);
+
     }
 }
 
@@ -33,7 +33,7 @@ export const getLikedImages = async () => {
         const likedImages = await AsyncStorage.getItem('likedImages');
         return likedImages ? JSON.parse(likedImages) : [];
     } catch (error) {
-        console.log('Error getting liked images', error);
+
         return [];
     }
 }
@@ -44,7 +44,7 @@ export const isImageLiked = async (imageId) => {
         likedImages = likedImages ? JSON.parse(likedImages) : [];
         return likedImages.some(img => img.id === imageId);
     } catch (error) {
-        console.log('Error checking if image is liked', error);
+
         return false;
     }
 }

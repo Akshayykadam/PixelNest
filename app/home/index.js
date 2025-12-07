@@ -57,7 +57,7 @@ const HomeScreen = () => {
         }
 
         if (cat) param.category = cat;
-        console.log('param:', param.category);
+
         fetchImages(param, false);
     }
 

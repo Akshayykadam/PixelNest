@@ -15,7 +15,7 @@ const formatUrl = (param) => { //{q, page, category, order}
         let value = key == 'q' ? encodeURIComponent(param[key]) : param[key];
         url += `&${key}=${value}`;
     });
-    console.log('url: ' + url);
+
     return url;
 }
 
@@ -25,7 +25,7 @@ export const apiCall = async (param) => {
         const { data } = response;
         return { success: true, data }
     } catch (error) {
-        console.log('Something Went Wrong: ', error.message);
+
         return { success: false, error: error.message };
     }
 }
